@@ -1,0 +1,82 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+export default function Updates() {
+  const [updates, setUpdates] = useState([]);
+  const [error, setError] = useState(null);
+
+  // Mock data for updates (replace this with actual API call)
+  useEffect(() => {
+    const fetchUpdates = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await axios.get("http://localhost:3000/updates");
+
+        // Mocking data for now
+        const mockUpdates = [
+          {
+            id: 1,
+            title: "New Dashboard Feature Launched!",
+            description:
+              "We are excited to introduce a new dashboard feature that allows users to manage tasks more efficiently. Enjoy a smoother user experience with our latest UI updates!",
+            date: "September 15, 2024",
+          },
+          {
+            id: 2,
+            title: "Mobile App Now Available",
+            description:
+              "Our mobile app is now live! Download it from the App Store or Google Play to enjoy our services on the go.",
+            date: "September 10, 2024",
+          },
+          {
+            id: 3,
+            title: "Performance Improvements",
+            description:
+              "We’ve optimized server performance to reduce page load times by 30%. This will make your experience even faster and more reliable.",
+            date: "September 5, 2024",
+          },
+        ];
+
+        // Set updates data
+        setUpdates(mockUpdates);
+      } catch (err) {
+        // Set error state if the request fails
+        setError("Failed to load updates. Please try again later.");
+      }
+    };
+
+    fetchUpdates();
+  }, []);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <p className="text-red-500 text-lg">{error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
+      <div className="container mx-auto max-w-4xl">
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-white">Latest Updates</h1>
+
+        <div className="grid grid-cols-1 gap-8">
+          {updates.length > 0 ? (
+            updates.map((update) => (
+              <div key={update.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg transition transform hover:-translate-y-2 duration-300">
+                <h2 className="text-2xl font-semibold mb-2 text-gray-900 dark:text-white">{update.title}</h2>
+                <p className="text-gray-700 dark:text-gray-300 mb-4">{update.description}</p>
+                <div className="text-right">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">{update.date}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-700 dark:text-gray-300">No updates available.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
